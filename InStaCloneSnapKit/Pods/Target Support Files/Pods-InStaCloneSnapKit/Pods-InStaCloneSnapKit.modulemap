@@ -1,0 +1,6 @@
+framework module Pods_InStaCloneSnapKit {
+  umbrella header "Pods-InStaCloneSnapKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
