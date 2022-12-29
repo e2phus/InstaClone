@@ -39,6 +39,13 @@ struct PostViewModel {
         }
     }
     
+    var likeButtonImage: UIImage? {
+        return post.didLike ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+    }
+    
+    var likeButtonTintColor: UIColor {
+        return post.didLike ? .red : .black
+    }
     
     init(post: Post) {
         self.post = post
