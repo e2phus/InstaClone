@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		198C56EAB4F932A4CAA963E9 /* Pods_InStaCloneSnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1291931E3CABAAAA89AB020 /* Pods_InStaCloneSnapKit.framework */; };
 		5D0AEB6429530C4500704FFA /* ProfileHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0AEB6329530C4500704FFA /* ProfileHeaderViewModel.swift */; };
+		5D26ED0E295D7E5300797C23 /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D26ED0D295D7E5300797C23 /* NotificationCell.swift */; };
+		5D26ED10295DAC7300797C23 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D26ED0F295DAC7300797C23 /* Notification.swift */; };
 		5D9A7727295329D5009AE3DE /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9A7726295329D5009AE3DE /* UserCell.swift */; };
 		5D9A772929534B6B009AE3DE /* UserCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9A772829534B6B009AE3DE /* UserCellViewModel.swift */; };
 		5D9A772B2953FC20009AE3DE /* UploadPostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9A772A2953FC20009AE3DE /* UploadPostController.swift */; };
@@ -51,6 +53,8 @@
 
 /* Begin PBXFileReference section */
 		5D0AEB6329530C4500704FFA /* ProfileHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderViewModel.swift; sourceTree = "<group>"; };
+		5D26ED0D295D7E5300797C23 /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
+		5D26ED0F295DAC7300797C23 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		5D9A7726295329D5009AE3DE /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		5D9A772829534B6B009AE3DE /* UserCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCellViewModel.swift; sourceTree = "<group>"; };
 		5D9A772A2953FC20009AE3DE /* UploadPostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostController.swift; sourceTree = "<group>"; };
@@ -171,6 +175,7 @@
 				5D9A7726295329D5009AE3DE /* UserCell.swift */,
 				5D9A77342954A805009AE3DE /* CommentCell.swift */,
 				5D9A77362954AE7E009AE3DE /* CommentInputTextView.swift */,
+				5D26ED0D295D7E5300797C23 /* NotificationCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -201,6 +206,7 @@
 				5DD3C9572952997100E846CA /* User.swift */,
 				5D9A7730295410CA009AE3DE /* Post.swift */,
 				5D9A773A29555A46009AE3DE /* Comment.swift */,
+				5D26ED0F295DAC7300797C23 /* Notification.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -373,6 +379,7 @@
 				5D9A772B2953FC20009AE3DE /* UploadPostController.swift in Sources */,
 				5D9A7739295555DC009AE3DE /* CommentService.swift in Sources */,
 				5D9A773B29555A46009AE3DE /* Comment.swift in Sources */,
+				5D26ED10295DAC7300797C23 /* Notification.swift in Sources */,
 				5DD3C93A2952006800E846CA /* FeedController.swift in Sources */,
 				5D9A7731295410CA009AE3DE /* Post.swift in Sources */,
 				5DD3C9652952AD8400E846CA /* UserService.swift in Sources */,
@@ -395,6 +402,7 @@
 				5DD3C9582952997100E846CA /* User.swift in Sources */,
 				5DD3C9242951FFE400E846CA /* SceneDelegate.swift in Sources */,
 				5DD3C9422952008900E846CA /* CommentController.swift in Sources */,
+				5D26ED0E295D7E5300797C23 /* NotificationCell.swift in Sources */,
 				5DD3C94E29528DC600E846CA /* LoginController.swift in Sources */,
 				5D9A77352954A805009AE3DE /* CommentCell.swift in Sources */,
 			);

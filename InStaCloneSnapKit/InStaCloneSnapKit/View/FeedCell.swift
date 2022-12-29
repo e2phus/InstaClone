@@ -15,6 +15,7 @@ import SDWebImage
 
 protocol FeedCellDelegate: AnyObject {
     func cell(_ cell: FeedCell, wantsToShowCommentsFor post: Post)
+    func cell(_ cell: FeedCell, wantsToShowProfileFor uid: String)
     func cell(_ cell: FeedCell, didLike post: Post)
 }
 
@@ -33,11 +34,10 @@ class FeedCell: UICollectionViewCell {
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.isUserInteractionEnabled = true
         imageView.backgroundColor = .lightGray
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(showUserProfile))
-        imageView.isUserInteractionEnabled = false
+        imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tap)
         
         return imageView
@@ -142,6 +142,8 @@ class FeedCell: UICollectionViewCell {
     // MARK: - Actions
     @objc func showUserProfile() {
         print(#function)
+        guard let viewModel = viewModel else { return }
+        delegate?.cell(self, wantsToShowProfileFor: viewModel.post.ownerUid)
     }
     
     @objc func showOptions() {
