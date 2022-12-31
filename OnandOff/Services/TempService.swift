@@ -7,7 +7,3 @@
 
 
 import Foundation
-
-class Service {
-    let test = 1
-}
