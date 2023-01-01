@@ -21,10 +21,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         homeVC.tabBarItem.image = UIImage(named: "home")
         
         let LookAroundVC = LookAroundViewController()
-        LookAroundVC.tabBarItem.image = UIImage(systemName: "magnifyingglass")
+        LookAroundVC.tabBarItem.image = UIImage(named: "magnifyingglass")
         
         let myPageVC = MyPageViewController()
-        myPageVC.tabBarItem.image = UIImage(systemName: "person.fill")
+        myPageVC.tabBarItem.image = UIImage(named: "user")
         
         let tabbar = UITabBarController().then {
             $0.tabBar.backgroundColor = .white
