@@ -37,7 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             $0.tabBar.clipsToBounds = false
         }
         
-        window?.rootViewController = tabbar
+        window?.rootViewController = LoginViewController()
         window?.makeKeyAndVisible()
     }
 
