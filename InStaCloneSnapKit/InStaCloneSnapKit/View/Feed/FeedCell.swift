@@ -4,27 +4,25 @@
 //
 //  Created by e2phus on 2022/12/21.
 //
-// MARK: - Modify
-// - TapGesture
-// -
-
 
 import UIKit
 import SnapKit
+import ActiveLabel
 import SDWebImage
 
 protocol FeedCellDelegate: AnyObject {
+    func cell(_ cell: FeedCell, didLike post: Post)
     func cell(_ cell: FeedCell, wantsToShowCommentsFor post: Post)
     func cell(_ cell: FeedCell, wantsToShowProfileFor uid: String)
-    func cell(_ cell: FeedCell, didLike post: Post)
+    func cell(_ cell: FeedCell, wantsToViewLikesFor postId: String)
+    func cell(_ cell: FeedCell, wantsToShowOptionsForPost post: Post)
+    // func cell(_ cell: FeedCell, wantsToBookmarkForPost post: Post)
 }
-
 
 class FeedCell: UICollectionViewCell {
     
     // MARK: - Properties
     weak var delegate: FeedCellDelegate?
-    
     var viewModel: PostViewModel? {
         didSet {
             configure()
@@ -58,7 +56,7 @@ class FeedCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(showOptions), for: .touchUpInside)
         return button
     }()
-    
+        
     private let postImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -111,8 +109,8 @@ class FeedCell: UICollectionViewCell {
     }()
     
     // ActiveLabel
-    let captionLabel: UILabel = {
-        let label = UILabel()
+    let captionLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
@@ -129,15 +127,12 @@ class FeedCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
-        configureLayout()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - API
-    
     
     // MARK: - Actions
     @objc func showUserProfile() {
@@ -148,6 +143,8 @@ class FeedCell: UICollectionViewCell {
     
     @objc func showOptions() {
         print(#function)
+        guard let viewModel = viewModel else { return }
+        delegate?.cell(self, wantsToShowOptionsForPost: viewModel.post)
     }
     
     @objc func didTapComments() {
@@ -172,10 +169,12 @@ class FeedCell: UICollectionViewCell {
     
     @objc func handleLikesTapped() {
         print(#function)
+        guard let viewModel = viewModel else { return }
+        delegate?.cell(self, wantsToViewLikesFor: viewModel.post.postId)
     }
     
     // MARK: - Helpers
-    func configureLayout() {
+    func configureUI() {
         // ProfileImageView
         addSubview(profileImageView)
         profileImageView.clipsToBounds = true
@@ -249,9 +248,12 @@ class FeedCell: UICollectionViewCell {
     
     func configure() {
         guard let viewModel = viewModel else { return }
-        captionLabel.text = viewModel.caption
-        postImageView.sd_setImage(with: viewModel.imageUrl)
         
+        captionLabel.configureLinkAttribute = viewModel.configureLinkAttribute
+        captionLabel.enabledTypes = viewModel.enabledTypes
+        viewModel.customizeLabel(captionLabel)
+        
+        postImageView.sd_setImage(with: viewModel.imageUrl)
         profileImageView.sd_setImage(with: viewModel.userProfileImageUrl)
         usernameButton.setTitle(viewModel.username, for: .normal)
         
@@ -259,5 +261,6 @@ class FeedCell: UICollectionViewCell {
         likeButton.tintColor = viewModel.likeButtonTintColor
         likeButton.setImage(viewModel.likeButtonImage, for: .normal)
         
+        postTimeLabel.text = viewModel.timestampString
     }
 }

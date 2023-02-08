@@ -17,7 +17,7 @@ class CommentController: UICollectionViewController {
     
     private lazy var commentInputView: CommentInputTextView = {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
-        let commentView = CommentInputTextView(frame: frame)
+        let commentView = CommentInputTextView(config: .comments, frame: frame)
         commentView.delegate = self
         return commentView
     }()
@@ -64,9 +64,6 @@ class CommentController: UICollectionViewController {
             self.collectionView.reloadData()
         }
     }
-    
-    
-    // MARK: - Actions
     
     // MARK: - Helpers
     func configureCollectcionView() {
@@ -118,13 +115,15 @@ extension CommentController: CommentInputTextViewDelegate {
         print(#function)
         
         guard let tab = tabBarController as? MainTabController else { return }
-        guard let user = tab.user else { return }
+        guard let currentUser = tab.user else { return }
         
         self.showLoader(true)
         
-        CommentService.uploadComment(comment: comment, post: post, user: user) { error in
+        CommentService.uploadComment(comment: comment, post: post, user: currentUser) { error in
             self.showLoader(false)
             inputView.clearCommentTextView()
+            
+            NotificationService.uploadNotification(toUid: self.post.ownerUid, fromUser: currentUser, type: .comment, post: self.post)
         }
     }
 }

@@ -13,7 +13,6 @@ class RegisterationViewController: UIViewController {
     // MARK: - Properties
     private var viewModel = RegisterationViewModel()
     private var profileImage: UIImage?
-   
     weak var delegate: AuthenticationDelegate?
     
     private let logoImageView: UIImageView = {
@@ -52,7 +51,7 @@ class RegisterationViewController: UIViewController {
         return textField
     }()
     
-    private let signUpButton: UIButton = {
+    private lazy var signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.white.withAlphaComponent(0.7), for: .normal)
@@ -72,7 +71,7 @@ class RegisterationViewController: UIViewController {
         return view
     }()
     
-    private let loginButton: UIButton = {
+    private lazy var alreadyButton: UIButton = {
         let button = UIButton(type: .system)
         button.attributedTitle(firstSentence: "Already have an account?", secondSentence: "Log In")
         button.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
@@ -110,8 +109,8 @@ class RegisterationViewController: UIViewController {
     @objc func handleSignUp() {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
-        guard let fullname = fullnameTextField.text?.lowercased() else { return }
-        guard let username = usernameTextField.text?.lowercased() else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let username = usernameTextField.text else { return }
         guard let profileImage = UIImage(systemName: "person") else { return }
         
         let credentials = AuthCredentials(email: email, password: password, fullname: fullname, username: username, profileImage: profileImage)
@@ -136,19 +135,19 @@ class RegisterationViewController: UIViewController {
     func configureLayout() {
         // LogoImageView
         view.addSubview(logoImageView)
-        logoImageView.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
-            make.width.equalTo(120)
-            make.height.equalTo(80)
+        logoImageView.snp.makeConstraints {
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
+            $0.width.equalTo(120)
+            $0.height.equalTo(80)
         }
         
         // DescriptionLabel
         view.addSubview(descriptionLabel)
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(20)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(view.snp.right).offset(-32)
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(logoImageView.snp.bottom).offset(20)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // StackView
@@ -156,27 +155,26 @@ class RegisterationViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 10
         view.addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(32)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(view.snp.right).offset(-32)
+        stackView.snp.makeConstraints {
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(32)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // BottomLineView
         view.addSubview(bottomLineView)
-        bottomLineView.translatesAutoresizingMaskIntoConstraints = false
-        bottomLineView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-45)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(view.snp.right).offset(-32)
+        bottomLineView.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-45)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
     
-        // SignUpButton
-        view.addSubview(loginButton)
-        loginButton.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        // AlreadyButton
+        view.addSubview(alreadyButton)
+        alreadyButton.snp.makeConstraints {
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     

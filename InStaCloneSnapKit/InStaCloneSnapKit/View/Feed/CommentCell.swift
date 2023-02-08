@@ -22,27 +22,27 @@ class CommentCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.backgroundColor = .lightGray
-        
         return imageView
     }()
     
-    private let commentLabel = UILabel()
+    private let commentLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        return label
+    }()
 
     // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureLayout()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    // MARK: - API
-    
     // MARK: - Helpers
-    func configureLayout() {
+    func configureUI() {
         // ProfileImageView
         addSubview(profileImageView)
         profileImageView.snp.makeConstraints { make in
@@ -53,7 +53,6 @@ class CommentCell: UICollectionViewCell {
         profileImageView.layer.cornerRadius = 40 / 2
         
         // CommentLabel
-        commentLabel.numberOfLines = 0
         addSubview(commentLabel)
         commentLabel.snp.makeConstraints { make in
             make.centerY.equalTo(snp.centerY)
@@ -67,5 +66,4 @@ class CommentCell: UICollectionViewCell {
         profileImageView.sd_setImage(with: viewModel.profileImageUrl)
         commentLabel.attributedText = viewModel.commentLabelText()
     }
-    
 }

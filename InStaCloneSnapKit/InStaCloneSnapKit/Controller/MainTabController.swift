@@ -45,17 +45,13 @@ class MainTabController: UITabBarController {
         }
     }
     
-    
-    // MARK: - Actions
-    
-    
     // MARK: - Helpers
     func configureViewControllers(withUser user: User) {
         view.backgroundColor = .white
         
         let feedLayout = UICollectionViewFlowLayout()
         let feed = templateNavigationController(unselectedImage: UIImage(systemName: "house")!, selectedImage: UIImage(systemName: "house.fill")!, rootViewController: FeedController(collectionViewLayout: feedLayout))
-        let search = templateNavigationController(unselectedImage: UIImage(systemName: "magnifyingglass")!, selectedImage: UIImage(systemName: "magnifyingglass")!, rootViewController: SearchController())
+        let search = templateNavigationController(unselectedImage: UIImage(systemName: "magnifyingglass")!, selectedImage: UIImage(systemName: "magnifyingglass")!, rootViewController: SearchController(config: .all))
         let reels = templateNavigationController(unselectedImage: UIImage(systemName: "video")!, selectedImage: UIImage(systemName: "video.fill")!, rootViewController: ReelsController())
         let notifications = templateNavigationController(unselectedImage: UIImage(systemName: "heart")!, selectedImage: UIImage(systemName: "heart.fill")!, rootViewController: NotificationsController())
         let profileController = ProfileController(user: user)
@@ -84,3 +80,5 @@ extension MainTabController: AuthenticationDelegate {
         self.dismiss(animated: true, completion: nil)
     }
 }
+
+

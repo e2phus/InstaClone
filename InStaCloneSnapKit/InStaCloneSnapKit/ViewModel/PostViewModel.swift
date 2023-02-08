@@ -6,7 +6,7 @@
 //
 
 import UIKit
-// import ActiveLabel
+import ActiveLabel
 
 struct PostViewModel {
     var post: Post
@@ -45,6 +45,44 @@ struct PostViewModel {
     
     var likeButtonTintColor: UIColor {
         return post.didLike ? .red : .black
+    }
+    
+    var timestampString: String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.second, .minute, .hour, .day, .weekOfMonth]
+        formatter.maximumUnitCount = 1
+        formatter.unitsStyle = .full
+        return formatter.string(from: post.timestamp.dateValue(), to: Date())
+    }
+    
+    var customLabelType: ActiveType {
+        return ActiveType.custom(pattern: "^\(username)\\b")
+    }
+    
+    var enabledTypes: [ActiveType] {
+        return [.mention, .hashtag, .url, customLabelType]
+    }
+    
+    var configureLinkAttribute: ConfigureLinkAttribute {
+        return { (type, attributes, isSelected) in
+            var atts = attributes
+            switch type {
+            case .custom:
+                atts[NSAttributedString.Key.font] = UIFont.boldSystemFont(ofSize: 14)
+            default: ()
+            }
+            return atts
+        }
+    }
+    
+    func customizeLabel(_ label: ActiveLabel) {
+        label.customize { label in
+            label.text = "\(username) \(caption)"
+            label.customColor[customLabelType] = .black
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textColor = .black
+            label.numberOfLines = 2
+        }
     }
     
     init(post: Post) {

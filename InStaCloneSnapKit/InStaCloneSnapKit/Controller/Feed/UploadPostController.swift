@@ -57,8 +57,6 @@ class UploadPostController: UIViewController {
         configureLayout()
     }
     
-    // MARK: - API
-    
     // MARK: - Actions
     @objc func didTapCancel() {
         dismiss(animated: true, completion: nil)
@@ -105,27 +103,26 @@ class UploadPostController: UIViewController {
         // PhotoImageView
         view.addSubview(photoImageView)
         photoImageView.layer.cornerRadius = 10
-        photoImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(180)
-            make.centerX.equalTo(view.snp.centerX)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
+        photoImageView.snp.makeConstraints {
+            $0.height.width.equalTo(180)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
         }
         
         // CaptionTextView
         view.addSubview(captionTextView)
-        captionTextView.snp.makeConstraints { make in
-            make.top.equalTo(photoImageView.snp.bottom).offset(16)
-            make.left.equalTo(view.snp.left).offset(12)
-            make.right.equalTo(view.snp.right).offset(12)
-            make.height.equalTo(64)
+        captionTextView.snp.makeConstraints {
+            $0.top.equalTo(photoImageView.snp.bottom).offset(16)
+            $0.left.equalTo(view.snp.left).offset(12)
+            $0.right.equalTo(view.snp.right).offset(12)
+            $0.height.equalTo(64)
         }
         
         // CharacterCountLabel
         view.addSubview(characterCountLabel)
-        characterCountLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(captionTextView.snp.bottom).offset(8)
-            make.right.equalTo(view.snp.right).offset(-12)
-            
+        characterCountLabel.snp.makeConstraints {
+            $0.bottom.equalTo(captionTextView.snp.bottom).offset(8)
+            $0.right.equalTo(view.snp.right).offset(-12)
         }
     }
 }

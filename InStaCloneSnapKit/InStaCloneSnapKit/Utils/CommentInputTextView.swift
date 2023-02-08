@@ -11,10 +11,31 @@ protocol CommentInputTextViewDelegate: AnyObject {
     func inputView(_ inputView: CommentInputTextView, wantsToUploadComment comment: String)
 }
 
+
+enum InputViewConfiguration {
+    case comments
+    case messages
+    
+    var placeholderText: String {
+        switch self {
+        case .comments: return "Comment..."
+        case .messages: return "Message..."
+        }
+    }
+    
+    var actionButtonTitle: String {
+        switch self {
+        case .comments: return "Post"
+        case .messages: return "Send"
+        }
+    }
+}
+
 class CommentInputTextView: UIView {
     
     // MARK: - Properties
     weak var delegate: CommentInputTextViewDelegate?
+    private let config: InputViewConfiguration
     
     private let commentTextView: InputTextView = {
         let textView = InputTextView()
@@ -25,7 +46,7 @@ class CommentInputTextView: UIView {
         return textView
     }()
     
-    private let postButton: UIButton = {
+    private lazy var postButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Post", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -35,12 +56,12 @@ class CommentInputTextView: UIView {
     }()
     
     
-    
-    
     // MARK: - Lifecycle
-    override init(frame: CGRect) {
+    init(config: InputViewConfiguration, frame: CGRect) {
+        self.config = config
         super.init(frame: frame)
         configureLayout()
+        
         backgroundColor = .white
         autoresizingMask = .flexibleHeight
     }
@@ -52,9 +73,6 @@ class CommentInputTextView: UIView {
     override var intrinsicContentSize: CGSize {
         return .zero
     }
-    
-    
-    // MARK: - API
     
     // MARK: - Actions
     @objc func handlePostTapped() {

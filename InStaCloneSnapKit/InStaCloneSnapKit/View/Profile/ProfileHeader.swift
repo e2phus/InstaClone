@@ -11,9 +11,8 @@ import SDWebImage
 
 protocol ProfileHeaderDelegate: AnyObject {
     func header(_ profileHeader: ProfileHeader, didTapActionButtonFor user: User)
-    
-//    func header(_ profileHeader: ProfileHeader, wantsToFollow uid: String)
-//    func header(_ profileHeader: ProfileHeader, wantsToUnfollow uid: String)
+    func header(_ profileHeader: ProfileHeader, wantsToViewFollowersFor user: User)
+    func header(_ profileHeader: ProfileHeader, wantsToViewFollowingFor user: User)
 //    func headerWantsToshowEditProfile(_ profileHeader: ProfileHeader)
 }
 

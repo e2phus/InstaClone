@@ -5,7 +5,6 @@
 //  Created by e2phus on 2022/12/22.
 //
 
-import Foundation
 import Firebase
 
 struct Post {
@@ -18,7 +17,7 @@ struct Post {
     let ownerImageUrl: String
     let ownerUsername: String
     var didLike = false
-    // let hashtags: [String]?
+    let hashtags: [String]?
     
     init(postId: String, dictionary: [String: Any]) {
         self.postId = postId
@@ -29,6 +28,6 @@ struct Post {
         self.timestamp = dictionary["timestamp"] as? Timestamp ?? Timestamp(date: Date())
         self.ownerImageUrl = dictionary["ownerImageUrl"] as? String ?? ""
         self.ownerUsername = dictionary["ownerUsername"] as? String ?? ""
-        // self.hashtags = dictionary["hashtags"] as? [String] ?? [String]()
+        self.hashtags = dictionary["hashtags"] as? [String] ?? [String]()
     }
 }

@@ -37,8 +37,16 @@ struct AuthService {
                                            "profileImageUrl": imageUrl,
                                            "uid": uid]
                 
+                if let fcmToken = Messaging.messaging().fcmToken {
+                    data["fcmToken"] = fcmToken
+                }
+                
                 COLLECTION_USERS.document(uid).setData(data, completion: completion)
             }
         }
+    }
+    
+    static func resetPassword(withEmail email: String, completion: @escaping(Error?) -> Void) {
+        Auth.auth().sendPasswordReset(withEmail: email, completion: completion)
     }
 }

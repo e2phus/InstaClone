@@ -16,7 +16,6 @@ class LoginViewController: UIViewController {
     
     // MARK: - Properties
     private var viewModel = LoginViewModel()
-    
     weak var delegate: AuthenticationDelegate?
     
     private let logoImageView: UIImageView = {
@@ -38,20 +37,21 @@ class LoginViewController: UIViewController {
     
     private let statusLabel: UILabel = {
         let label = UILabel()
-        // label.text = "Test StatusLabel"
-        label.font = UIFont.systemFont(ofSize: 11)
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .black
         return label
     }()
     
-    private let findPasswordButton: UIButton = {
+    private lazy var forgotPasswordButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Forgot Password?", for: .normal)
         button.setTitleColor(UIColor(white: 1, alpha: 0.8), for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        button.addTarget(self, action: #selector(handleShowForgotPassword), for: .touchUpInside)
         return button
     }()
     
-    private let loginButton: UIButton = {
+    private lazy var loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Log In", for: .normal)
         button.setTitleColor(.white.withAlphaComponent(0.7), for: .normal)
@@ -102,7 +102,7 @@ class LoginViewController: UIViewController {
         return view
     }()
     
-    private let signUpButton: UIButton = {
+    private lazy var signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.attributedTitle(firstSentence: "Don't have an account? ", secondSentence: "Sign Up")
         button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
@@ -130,7 +130,6 @@ class LoginViewController: UIViewController {
         } else {
             viewModel.password = sender.text
         }
-        
         updateForm()
     }
     
@@ -139,13 +138,19 @@ class LoginViewController: UIViewController {
         guard let password = passwordTextField.text else { return }
         AuthService.logUserIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
-                print("DEBUG: Failed to log user in \(error.localizedDescription)")
+                self.statusLabel.text = " \(error.localizedDescription)"
+                // print("DEBUG: Failed to log user in \(error.localizedDescription)")
                 return
             }
             
             self.delegate?.authenticationDidComplete()
             print("DEBUG: Success LogIn")
         }
+    }
+    
+    @objc func handleShowForgotPassword() {
+        let controller = ResetPasswordController()
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     // MARK: - Helpers
@@ -158,11 +163,11 @@ class LoginViewController: UIViewController {
     func configureLayout() {
         // LogoImageView
         view.addSubview(logoImageView)
-        logoImageView.snp.makeConstraints { make in
-            make.centerX.equalTo(view)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
-            make.width.equalTo(120)
-            make.height.equalTo(80)
+        logoImageView.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
+            $0.width.equalTo(120)
+            $0.height.equalTo(80)
         }
         
         // StackView
@@ -170,83 +175,83 @@ class LoginViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 10
         view.addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(32)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(view.snp.right).offset(-32)
+        stackView.snp.makeConstraints {
+            $0.top.equalTo(logoImageView.snp.bottom).offset(32)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // StatusLabel
         view.addSubview(statusLabel)
-        statusLabel.snp.makeConstraints { make in
-            make.top.equalTo(stackView.snp.bottom).offset(5)
-            make.left.equalTo(view.snp.left).offset(32)
+        statusLabel.snp.makeConstraints {
+            $0.top.equalTo(stackView.snp.bottom).offset(5)
+            $0.left.equalTo(view.snp.left).offset(32)
         }
         
         // FindPasswordButtonn
-        view.addSubview(findPasswordButton)
-        findPasswordButton.snp.makeConstraints { make in
-            make.centerY.equalTo(statusLabel.snp.centerY)
-            make.top.equalTo(stackView.snp.bottom).offset(5)
-            make.right.equalTo(view.snp.right).offset(-32)
+        view.addSubview(forgotPasswordButton)
+        forgotPasswordButton.snp.makeConstraints {
+            $0.centerY.equalTo(statusLabel.snp.centerY)
+            $0.top.equalTo(stackView.snp.bottom).offset(5)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // LoginButton
         view.addSubview(loginButton)
-        loginButton.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.top.equalTo(findPasswordButton.snp.bottom).offset(35)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(view.snp.right).offset(-32)
+        loginButton.snp.makeConstraints {
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(forgotPasswordButton.snp.bottom).offset(35)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // OrLabel
         view.addSubview(orLabel)
-        orLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.top.equalTo(loginButton.snp.bottom).offset(35)
+        orLabel.snp.makeConstraints {
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(loginButton.snp.bottom).offset(35)
         }
         
         // LeftLineView
         view.addSubview(leftLineView)
-        leftLineView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.centerY.equalTo(orLabel.snp.centerY)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(orLabel.snp.left).offset(-10)
+        leftLineView.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.centerY.equalTo(orLabel.snp.centerY)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(orLabel.snp.left).offset(-10)
         }
         
         // RightLineView
         view.addSubview(rightLineView)
-        leftLineView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.centerY.equalTo(orLabel.snp.centerY)
-            make.left.equalTo(orLabel.snp.right).offset(10)
-            make.right.equalTo(view.snp.right).offset(-32)
+        leftLineView.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.centerY.equalTo(orLabel.snp.centerY)
+            $0.left.equalTo(orLabel.snp.right).offset(10)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // FaceBook LogIn
         view.addSubview(faceBookLoginButton)
-        faceBookLoginButton.snp.makeConstraints { make in
-            make.top.equalTo(orLabel.snp.bottom).offset(35)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(view.snp.right).offset(-32)
+        faceBookLoginButton.snp.makeConstraints {
+            $0.top.equalTo(orLabel.snp.bottom).offset(35)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // BottomLineView
         view.addSubview(bottomLineView)
-        bottomLineView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-45)
-            make.left.equalTo(view.snp.left).offset(32)
-            make.right.equalTo(view.snp.right).offset(-32)
+        bottomLineView.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-45)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         // SignUpButton
         view.addSubview(signUpButton)
-        signUpButton.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        signUpButton.snp.makeConstraints {
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
         
@@ -262,5 +267,13 @@ extension LoginViewController: FormViewModel {
         loginButton.backgroundColor = viewModel.buttonBackgroundColor
         loginButton.setTitleColor(viewModel.buttonTitleColor, for: .normal)
         loginButton.isEnabled = viewModel.formIsValid
+    }
+}
+
+// MARK: - ResetPasswordControllerDelegate
+extension LoginViewController: ResetPasswordControllerDelegate {
+    func controllerDidSendResetPasswordLink(_ controller: ResetPasswordController) {
+        navigationController?.popViewController(animated: true)
+        self.showMessage(withTitle: "Success", message: "We sent a link to your email to reset your password")
     }
 }

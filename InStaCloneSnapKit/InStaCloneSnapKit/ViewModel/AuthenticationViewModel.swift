@@ -52,3 +52,18 @@ struct RegisterationViewModel: AuthenticationViewModel {
         return formIsValid ? .white : .white.withAlphaComponent(0.7)
     }
 }
+
+struct ResetPasswordViewModel: AuthenticationViewModel {
+    var email: String?
+    
+    var formIsValid: Bool { return email?.isEmpty == false }
+    
+    var buttonBackgroundColor: UIColor {
+        return formIsValid ? #colorLiteral(red: 1, green: 0.1857388616, blue: 0.5733950138, alpha: 0.7287221488) : #colorLiteral(red: 1, green: 0.1857388616, blue: 0.5733950138, alpha: 0.7287221488).withAlphaComponent(0.3)
+    }
+    
+    var buttonTitleColor: UIColor {
+        return formIsValid ? .white : UIColor(white: 1, alpha: 0.7)
+    }
+}
+

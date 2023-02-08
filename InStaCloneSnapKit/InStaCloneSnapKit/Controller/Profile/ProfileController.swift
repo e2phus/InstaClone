@@ -4,9 +4,6 @@
 //  Created by e2phus on 2022/12/20.
 //
 
-// MARK: - Modify
-// - ProfileHeader: Follwers, Following, Posts - 데이터 전달
-
 import UIKit
 
 private let headerIdentifier = "ProfileHeader"
@@ -17,12 +14,11 @@ class ProfileController: UICollectionViewController {
     // MARK: - Properties
     private var user: User {
         didSet {
-            print(user)
             collectionView.reloadData()
         }
     }
     
-     private var posts = [Post]()
+    private var posts = [Post]()
     
     // MARK: - Lifecycle
     init(user: User) {
@@ -41,7 +37,6 @@ class ProfileController: UICollectionViewController {
         fetchUserStats()
         fetchPosts()
     }
-    
     
     // MARK: - API
     func checkIfUserIsFollowed() {
@@ -65,10 +60,12 @@ class ProfileController: UICollectionViewController {
         }
     }
     
-    
     // MARK: - Actions
-    
-    
+    @objc func handleRefresh() {
+        posts.removeAll()
+        fetchPosts()
+    }
+
     
     // MARK: - Helpers
     func configureCollectionView() {
@@ -77,7 +74,19 @@ class ProfileController: UICollectionViewController {
         collectionView.backgroundColor = .white
         collectionView.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         collectionView.register(ProfileCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        navigationItem.title = "Lizard"
+        navigationItem.title = "\(user.username)"
+        
+        let refresher = UIRefreshControl()
+        refresher.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refresher
+    }
+    
+    func showEditProfileController() {
+        let controller = EditProfileController(user: user)
+        controller.delegate = self
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.modalPresentationStyle = .fullScreen
+        present(navigation, animated: true)
     }
 }
 
@@ -86,7 +95,6 @@ extension ProfileController {
     // MARK: - Header
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! ProfileHeader
-        print("DEBUG: Did call header function...")
         header.delegate = self
         header.viewModel = ProfileHeaderViewModel(user: user)
         return header
@@ -102,15 +110,12 @@ extension ProfileController {
         cell.viewModel = PostViewModel(post: posts[indexPath.row])
         return cell
     }
-    
-  
 }
 
 // MARK: - UICollectionViewDelegate
 extension ProfileController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(#function)
-         print("Debug: Post is \(posts[indexPath.row].caption)")
+         print(#function)
          let controller = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
          controller.post = posts[indexPath.row]
          navigationController?.pushViewController(controller, animated: true)
@@ -140,25 +145,44 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
 
 extension ProfileController: ProfileHeaderDelegate {
     func header(_ profileHeader: ProfileHeader, didTapActionButtonFor user: User) {
-        print(#function)
-        print("Handle action in controller")
+        guard let tab = tabBarController as? MainTabController else { return }
+        guard let currentUser = tab.user else { return }
+        
         if user.isCurrentUser {
-            print("Show Edit Profile")
-            self.collectionView.reloadData()
+            showEditProfileController()
         } else if user.isFollowed {
             UserService.unfollow(uid: user.uid) { error in
-                print("Did unfollow user")
                 self.user.isFollowed = false
-                self.collectionView.reloadData()
+                
+                NotificationService.deleteNotification(toUid: user.uid, type: .follow)
             }
         } else {
             UserService.follow(uid: user.uid) { error in
                 print("Did follow user")
                 self.user.isFollowed = true
                 self.collectionView.reloadData()
+                
+                NotificationService.uploadNotification(toUid: user.uid, fromUser: currentUser, type: .follow)
             }
         }
     }
     
+    func header(_ profileHeader: ProfileHeader, wantsToViewFollowersFor user: User) {
+        let controller = SearchController(config: .followers(user.uid))
+        navigationController?.pushViewController(controller, animated: true)
+    }
     
+    func header(_ profileHeader: ProfileHeader, wantsToViewFollowingFor user: User) {
+        let controller = SearchController(config: .following(user.uid))
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
+
+// MARK: - EditProfileControllerDelegate
+extension ProfileController: EditProfileControllerDelegate {
+    func controller(_ controller: EditProfileController, wantsToUpdate user: User) {
+        controller.dismiss(animated: true, completion: nil)
+        self.user = user
+    }
+}
+

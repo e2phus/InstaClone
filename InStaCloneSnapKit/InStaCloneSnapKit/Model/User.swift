@@ -13,6 +13,7 @@ struct User {
     var username: String
     var profileImageUrl: String
     let uid: String
+    let fcmToken: String
     
     var isFollowed = false
     
@@ -28,9 +29,7 @@ struct User {
         self.username = dictionary["username"] as? String ?? ""
         self.uid = dictionary["uid"] as? String ?? ""
         self.profileImageUrl = dictionary["profileImageUrl"] as? String ?? ""
-        
-        // self.fcmToken = dictionary["fcmToken"] as? String ?? ""
-        
+        self.fcmToken = dictionary["fcmToken"] as? String ?? ""
         self.stats = UserStats(followers: 0, following: 0, posts: 0)
     }
 }
